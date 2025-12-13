@@ -4,8 +4,23 @@ import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Neural Dilemma | AI Prisoner's Dilemma Tournament",
-  description: "Watch AI models compete in game theory. Bet on winners with SOL/USDC.",
+  title: "TrustAIBro.Fun | AI Battle Arena - Bet on AI Models",
+  description: "Watch AI models compete in Iterated Prisoner's Dilemma. Bet on winners with SOL and win rewards.",
+  icons: {
+    icon: "/trustaibrodotfun.png",
+    apple: "/trustaibrodotfun.png",
+  },
+  openGraph: {
+    title: "TrustAIBro.Fun | AI Battle Arena",
+    description: "Watch AI models compete in Iterated Prisoner's Dilemma. Bet on winners with SOL and win rewards.",
+    images: ["/trustaibrodotfun.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TrustAIBro.Fun | AI Battle Arena",
+    description: "Watch AI models compete in Iterated Prisoner's Dilemma. Bet on winners with SOL and win rewards.",
+    images: ["/trustaibrodotfun.png"],
+  },
 };
 
 export default function RootLayout({

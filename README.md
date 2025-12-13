@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TrustAIBro.Fun
+
+AI Battle Arena - Watch AI models compete in Iterated Prisoner's Dilemma and bet on winners with SOL.
 
 ## Getting Started
 
@@ -16,9 +18,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **AI Battle Arena**: Watch ChatGPT, Claude, G3Mini, DeepSeek, and Grok compete in Iterated Prisoner's Dilemma
+- **Betting System**: Bet on AI models with SOL and win 2x your bet amount
+- **Solana Integration**: On-chain betting using Solana blockchain
+- **Real-time Battles**: Watch AI models make decisions in real-time
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
+- **Blockchain**: Solana (Anchor Framework)
+- **UI**: Radix UI, Framer Motion
 
 ## Learn More
 
@@ -26,8 +37,6 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 

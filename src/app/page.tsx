@@ -7,7 +7,6 @@ import { AIAgentCard } from "@/components/AIAgentCard";
 import { BattleArena } from "@/components/BattleArena";
 import { BettingPanel } from "@/components/BettingPanel";
 import { Leaderboard } from "@/components/Leaderboard";
-import { TournamentBracket } from "@/components/TournamentBracket";
 import { WalletButton } from "@/components/WalletButton";
 import { MatchSelector } from "@/components/MatchSelector";
 import { PoolDeposit } from "@/components/PoolDeposit";
@@ -31,9 +30,10 @@ import {
   Calendar,
   Sparkles,
 } from "lucide-react";
+import Image from "next/image";
 
 export function HomePage() {
-  const [activeTab, setActiveTab] = useState<"arena" | "bracket" | "agents" | "tournament">("arena");
+  const [activeTab, setActiveTab] = useState<"arena" | "agents" | "tournament">("arena");
   const { tournament, currentMatch: tournamentMatch, isRunning, runTournament } = useTournament();
   const { balance } = useBalance();
   const { connected, publicKey } = useWallet();
@@ -117,15 +117,6 @@ export function HomePage() {
     checkAndReset();
   }, [battleMatch, isBattleRunning, battleMatchId, connected, publicKey, bettingClient, resetBattle]);
 
-  const mockBracket = [
-    { id: "1", player1: mockAgents[0], player2: mockAgents[1], winner: mockAgents[0], status: "completed" as const, round: 1 },
-    { id: "2", player1: mockAgents[2], player2: mockAgents[3], winner: mockAgents[2], status: "completed" as const, round: 1 },
-    { id: "3", player1: mockAgents[3], player2: mockAgents[4], winner: null, status: "live" as const, round: 1 },
-    { id: "4", player1: mockAgents[0], player2: mockAgents[2], winner: null, status: "pending" as const, round: 2 },
-    { id: "5", player1: null, player2: null, winner: null, status: "pending" as const, round: 2 },
-    { id: "6", player1: null, player2: null, winner: null, status: "pending" as const, round: 3 },
-  ];
-
   const displayAgents = tournament?.standings.length
     ? tournament.standings.map(s => {
         const agent = AI_MODELS.find(a => a.id === s.agentId);
@@ -139,17 +130,23 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="clay-block px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl clay-block-coral flex items-center justify-center">
-                <Zap className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center">
+                <Image
+                  src="/trustaibrodotfun.png"
+                  alt="TrustAIBro.Fun Logo"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
-                <h1 className="font-display text-xl text-[#FF6B6B]">NEURAL DILEMMA</h1>
-                <p className="text-xs text-muted-foreground font-medium">AI Prisoner&apos;s Dilemma</p>
+                <h1 className="font-display text-xl text-[#FF6B6B]">TrustAIBro.Fun</h1>
+                <p className="text-xs text-muted-foreground font-medium">AI Battle Arena</p>
               </div>
             </div>
 
             <div className="hidden md:flex items-center gap-2">
-              {(["arena", "tournament", "bracket", "agents"] as const).map((tab) => (
+              {(["arena", "tournament", "agents"] as const).map((tab) => (
                 <motion.button
                   key={tab}
                   whileHover={{ scale: 1.05 }}
@@ -201,16 +198,15 @@ export function HomePage() {
             </div>
 
             <h1 className="font-display text-5xl md:text-7xl mb-6">
-              <span className="text-[#FF6B6B]">AI MODELS</span>
+              <span className="text-[#FF6B6B]">TrustAIBro</span>
               <br />
               <span className="text-[#4ECDC4]">
-                BATTLE IN GAME THEORY
+                .Fun
               </span>
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-medium">
-              Watch ChatGPT, Claude, G3Mini, DeepSeek, and Grok compete in Iterated Prisoner&apos;s Dilemma.
-              Predict outcomes and win with SOL/USDC.
+              Watch AI models compete in Iterated Prisoner&apos;s Dilemma. Bet on winners with SOL and win rewards.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 mb-14">
@@ -578,18 +574,6 @@ export function HomePage() {
             </div>
           )}
 
-          {activeTab === "bracket" && (
-            <div>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl clay-block-yellow flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-white drop-shadow-md" />
-                </div>
-                <h2 className="font-display text-2xl text-[#FF9F45]">Tournament Bracket</h2>
-              </div>
-              <TournamentBracket matches={mockBracket} />
-            </div>
-          )}
-
           {activeTab === "agents" && (
             <div>
               <div className="flex items-center gap-4 mb-8">
@@ -613,23 +597,33 @@ export function HomePage() {
           <div className="clay-block p-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl clay-block-coral flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center">
+                  <Image
+                    src="/trustaibrodotfun.png"
+                    alt="TrustAIBro.Fun Logo"
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="font-display text-xl text-[#FF6B6B]">NEURAL DILEMMA</span>
+                <span className="font-display text-xl text-[#FF6B6B]">TrustAIBro.Fun</span>
               </div>
 
               <div className="flex items-center gap-4">
                 <motion.a 
                   whileHover={{ scale: 1.1, y: -4 }}
-                  href="#" 
+                  href="https://github.com/SaitamaCoderVN/trustaibrodotfun" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 rounded-2xl clay-block flex items-center justify-center text-muted-foreground hover:text-[#4ECDC4] transition-colors"
                 >
                   <Github className="w-6 h-6" />
                 </motion.a>
                 <motion.a 
                   whileHover={{ scale: 1.1, y: -4 }}
-                  href="#" 
+                  href="https://x.com/trustaibro" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 rounded-2xl clay-block flex items-center justify-center text-muted-foreground hover:text-[#5B9BF8] transition-colors"
                 >
                   <Twitter className="w-6 h-6" />
@@ -637,7 +631,7 @@ export function HomePage() {
               </div>
 
               <p className="text-sm text-muted-foreground font-medium">
-                Built on Solana. Powered by AI.
+                Built on Solana. Powered by D2D.
               </p>
             </div>
           </div>
