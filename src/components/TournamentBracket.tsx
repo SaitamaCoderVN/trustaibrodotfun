@@ -87,15 +87,11 @@ export function TournamentBracket({
                       >
                         {match.player1 ? (
                           <>
-                            <div
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-display ${match.winner?.id === match.player1?.id ? "bg-white/30 text-white" : ""}`}
-                              style={{
-                                backgroundColor: match.winner?.id !== match.player1?.id ? `${match.player1.color}22` : undefined,
-                                color: match.winner?.id !== match.player1?.id ? match.player1.color : undefined,
-                              }}
-                            >
-                              {match.player1.shortName.charAt(0)}
-                            </div>
+                            <AIAvatar 
+                              agent={match.player1} 
+                              size="md" 
+                              className={match.winner?.id === match.player1?.id ? "bg-white/30" : ""}
+                            />
                             <span
                               className={`text-sm font-display truncate flex-1 ${match.winner?.id === match.player1?.id ? "text-white" : ""}`}
                               style={{ color: match.winner?.id !== match.player1?.id ? match.player1.color : undefined }}
@@ -125,15 +121,11 @@ export function TournamentBracket({
                       >
                         {match.player2 ? (
                           <>
-                            <div
-                              className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-display ${match.winner?.id === match.player2?.id ? "bg-white/30 text-white" : ""}`}
-                              style={{
-                                backgroundColor: match.winner?.id !== match.player2?.id ? `${match.player2.color}22` : undefined,
-                                color: match.winner?.id !== match.player2?.id ? match.player2.color : undefined,
-                              }}
-                            >
-                              {match.player2.shortName.charAt(0)}
-                            </div>
+                            <AIAvatar 
+                              agent={match.player2} 
+                              size="md" 
+                              className={match.winner?.id === match.player2?.id ? "bg-white/30" : ""}
+                            />
                             <span
                               className={`text-sm font-display truncate flex-1 ${match.winner?.id === match.player2?.id ? "text-white" : ""}`}
                               style={{ color: match.winner?.id !== match.player2?.id ? match.player2.color : undefined }}

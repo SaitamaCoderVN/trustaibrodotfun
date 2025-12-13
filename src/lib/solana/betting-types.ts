@@ -48,10 +48,9 @@ export interface MarketState {
 export const AI_INDEX_MAP: Record<string, number> = {
   chatgpt: 0,
   claude: 1,
-  gemini: 2,
+  g3mini: 2,
   deepseek: 3,
-  llama: 4,
-  grok: 5,
+  grok: 4,
 };
 
 export const INDEX_AI_MAP: Record<number, string> = Object.fromEntries(

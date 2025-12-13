@@ -28,20 +28,20 @@ export const strategies: Record<string, AIStrategy> = {
     return { move: 'C', reason: 'Forgive and cooperate' };
   },
 
-  gemini: (input) => {
-    if (input.round <= 3) {
-      return { move: 'C', reason: 'Gathering data on opponent strategy' };
+  g3mini: (input) => {
+    if (input.round <= 2) {
+      return { move: 'C', reason: 'Efficient: Quick trust establishment' };
     }
-    const recentHistory = input.history.slice(-5);
+    const recentHistory = input.history.slice(-4);
     const opDefects = recentHistory.filter((h) => h.op === 'D').length;
     const opCooperates = recentHistory.filter((h) => h.op === 'C').length;
     if (opDefects > opCooperates) {
-      return { move: 'D', reason: 'Pattern detected: opponent favors defection' };
+      return { move: 'D', reason: 'Efficient: Pattern detected, switch strategy' };
     }
-    if (input.round > 45) {
-      return { move: 'D', reason: 'End-game optimization' };
+    if (input.round > 40) {
+      return { move: 'D', reason: 'Efficient: End-game optimization' };
     }
-    return { move: 'C', reason: 'Opponent appears cooperative' };
+    return { move: 'C', reason: 'Efficient: Maintain cooperation' };
   },
 
   deepseek: (input) => {
@@ -57,17 +57,6 @@ export const strategies: Record<string, AIStrategy> = {
       return { move: 'D', reason: 'GTO: Exploit end-game trust' };
     }
     return { move: input.opponent_last_move === 'D' ? 'D' : 'C', reason: 'GTO: Tit-for-tat with analysis' };
-  },
-
-  llama: (input) => {
-    if (input.round === 1) {
-      return { move: 'C', reason: 'Random cooperator starts friendly' };
-    }
-    const rand = Math.random();
-    if (rand < 0.7) {
-      return { move: 'C', reason: 'Random: Cooperate (70% bias)' };
-    }
-    return { move: 'D', reason: 'Random: Defect (30% chance)' };
   },
 
   grok: (input) => {

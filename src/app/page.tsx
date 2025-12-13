@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AI_MODELS } from "@/lib/types";
 import { AIAgentCard } from "@/components/AIAgentCard";
 import { BattleArena } from "@/components/BattleArena";
@@ -9,9 +9,14 @@ import { BettingPanel } from "@/components/BettingPanel";
 import { Leaderboard } from "@/components/Leaderboard";
 import { TournamentBracket } from "@/components/TournamentBracket";
 import { WalletButton } from "@/components/WalletButton";
+import { MatchSelector } from "@/components/MatchSelector";
+import { PoolDeposit } from "@/components/PoolDeposit";
 import { useTournament } from "@/hooks/useTournament";
+import { useMatchBattle } from "@/hooks/useMatchBattle";
 import { useBalance } from "@/hooks/useBalance";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useBettingClient } from "@/lib/solana/betting-client";
+import { AIModel } from "@/lib/types";
 import {
   Zap,
   Trophy,
@@ -27,29 +32,99 @@ import {
   Sparkles,
 } from "lucide-react";
 
-const INITIAL_AGENTS = AI_MODELS.map((agent) => ({
-  ...agent,
-  wins: Math.floor(Math.random() * 20),
-  losses: Math.floor(Math.random() * 10),
-  totalScore: Math.floor(Math.random() * 500) + 100,
-}));
-
 export function HomePage() {
   const [activeTab, setActiveTab] = useState<"arena" | "bracket" | "agents" | "tournament">("arena");
-  const { tournament, currentMatch, isRunning, runTournament } = useTournament();
+  const { tournament, currentMatch: tournamentMatch, isRunning, runTournament } = useTournament();
   const { balance } = useBalance();
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
+  const bettingClient = useBettingClient();
+  
+  // Battle match state
+  const [selectedPlayer1, setSelectedPlayer1] = useState<AIModel | null>(null);
+  const [selectedPlayer2, setSelectedPlayer2] = useState<AIModel | null>(null);
+  const [battleMatchId, setBattleMatchId] = useState<string>("");
+  const [hasBets, setHasBets] = useState(false);
+  const { isRunning: isBattleRunning, currentMatch: battleMatch, matchResult, runBattle, reset: resetBattle } = useMatchBattle();
+  
+  // Use battle match if available, otherwise tournament match
+  const currentMatch = battleMatch || tournamentMatch;
+  
+  // Generate matchId when players are selected
+  useEffect(() => {
+    if (selectedPlayer1 && selectedPlayer2 && !battleMatchId) {
+      const matchId = `match-${Date.now()}`;
+      setBattleMatchId(matchId);
+    }
+  }, [selectedPlayer1, selectedPlayer2, battleMatchId]);
+  
+  const handleStartBattle = () => {
+    if (selectedPlayer1 && selectedPlayer2 && battleMatchId) {
+      runBattle(selectedPlayer1, selectedPlayer2, battleMatchId);
+    }
+  };
 
-  const mockAgents = useMemo(() => INITIAL_AGENTS, []);
+  // Use useState with useEffect to avoid hydration mismatch
+  // Initialize with fixed values, then update on client only
+  const [mockAgents, setMockAgents] = useState<typeof AI_MODELS>(
+    AI_MODELS.map((agent) => ({
+      ...agent,
+      wins: 0,
+      losses: 0,
+      totalScore: 0,
+    }))
+  );
 
-  const mockBracket = useMemo(() => [
+  // Set random values only on client to avoid hydration mismatch
+  useEffect(() => {
+    setMockAgents(
+      AI_MODELS.map((agent) => ({
+        ...agent,
+        wins: Math.floor(Math.random() * 20),
+        losses: Math.floor(Math.random() * 10),
+        totalScore: Math.floor(Math.random() * 500) + 100,
+      }))
+    );
+  }, []);
+
+  // Auto-reset when battle ends and user lost
+  useEffect(() => {
+    if (!battleMatch || isBattleRunning || !battleMatchId || !connected || !publicKey || !bettingClient) {
+      return;
+    }
+
+    const checkAndReset = async () => {
+      try {
+        const [market, bet] = await Promise.all([
+          bettingClient.getMarket(battleMatchId),
+          bettingClient.getBet(battleMatchId, publicKey),
+        ]);
+
+        // If market is settled and user lost, auto-reset after 3 seconds
+        if (market?.isSettled && bet && bet.aiIndex !== market.winningAi) {
+          setTimeout(() => {
+            resetBattle();
+            setSelectedPlayer1(null);
+            setSelectedPlayer2(null);
+            setBattleMatchId("");
+            setHasBets(false);
+          }, 3000); // Wait 3 seconds to show the result
+        }
+      } catch (error) {
+        console.error("Error checking bet status:", error);
+      }
+    };
+
+    checkAndReset();
+  }, [battleMatch, isBattleRunning, battleMatchId, connected, publicKey, bettingClient, resetBattle]);
+
+  const mockBracket = [
     { id: "1", player1: mockAgents[0], player2: mockAgents[1], winner: mockAgents[0], status: "completed" as const, round: 1 },
     { id: "2", player1: mockAgents[2], player2: mockAgents[3], winner: mockAgents[2], status: "completed" as const, round: 1 },
-    { id: "3", player1: mockAgents[4], player2: mockAgents[5], winner: null, status: "live" as const, round: 1 },
+    { id: "3", player1: mockAgents[3], player2: mockAgents[4], winner: null, status: "live" as const, round: 1 },
     { id: "4", player1: mockAgents[0], player2: mockAgents[2], winner: null, status: "pending" as const, round: 2 },
     { id: "5", player1: null, player2: null, winner: null, status: "pending" as const, round: 2 },
     { id: "6", player1: null, player2: null, winner: null, status: "pending" as const, round: 3 },
-  ], [mockAgents]);
+  ];
 
   const displayAgents = tournament?.standings.length
     ? tournament.standings.map(s => {
@@ -134,7 +209,7 @@ export function HomePage() {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-medium">
-              Watch ChatGPT, Claude, Gemini, and more compete in Iterated Prisoner&apos;s Dilemma.
+              Watch ChatGPT, Claude, G3Mini, DeepSeek, and Grok compete in Iterated Prisoner&apos;s Dilemma.
               Predict outcomes and win with SOL/USDC.
             </p>
 
@@ -283,43 +358,120 @@ export function HomePage() {
           {activeTab === "arena" && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-8">
-                <div>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-2xl clay-block-coral flex items-center justify-center">
-                      <Zap className="w-6 h-6 text-white" />
+                {/* Match Selector - Show when no battle is running */}
+                {!isBattleRunning && !battleMatch && (
+                  <MatchSelector
+                    onMatchSelected={(p1, p2) => {
+                      setSelectedPlayer1(p1);
+                      setSelectedPlayer2(p2);
+                      // matchId will be set by useEffect
+                    }}
+                    onStartBattle={handleStartBattle}
+                    disabled={isBattleRunning}
+                    canStartBattle={hasBets && !!battleMatchId}
+                  />
+                )}
+
+                {/* Battle Arena - Show during and after battle */}
+                {(isBattleRunning || battleMatch) && (
+                  <div>
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-2xl clay-block-coral flex items-center justify-center">
+                        <Zap className="w-6 h-6 text-white" />
+                      </div>
+                      <h2 className="font-display text-2xl text-[#FF6B6B]">
+                        {isBattleRunning ? "Battle In Progress" : "Battle Result"}
+                      </h2>
+                      {isBattleRunning && (
+                        <div className="clay-badge-coral">
+                          <span className="text-xs text-white font-display animate-pulse">LIVE</span>
+                        </div>
+                      )}
+                      {battleMatch && !isBattleRunning && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            resetBattle();
+                            setSelectedPlayer1(null);
+                            setSelectedPlayer2(null);
+                            setBattleMatchId("");
+                            setHasBets(false);
+                          }}
+                          className="clay-btn px-4 py-2 rounded-xl text-sm"
+                        >
+                          New Battle
+                        </motion.button>
+                      )}
                     </div>
-                    <h2 className="font-display text-2xl text-[#FF6B6B]">Live Battle</h2>
-                    {currentMatch && (
-                      <div className="clay-badge-coral">
-                        <span className="text-xs text-white font-display animate-pulse">LIVE</span>
+                    <BattleArena
+                      player1={battleMatch?.player1 || selectedPlayer1 || mockAgents[0]}
+                      player2={battleMatch?.player2 || selectedPlayer2 || mockAgents[1]}
+                      isLive={isBattleRunning}
+                      currentMatch={currentMatch}
+                    />
+                    
+                    {/* Show battle result */}
+                    {battleMatch && matchResult && !isBattleRunning && (
+                      <div className="mt-6 p-6 rounded-3xl clay-block-yellow">
+                        <h3 className="font-display text-xl mb-4">Battle Result</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Player 1 Score</p>
+                            <p className="font-display text-2xl text-[#4ECDC4]">
+                              {matchResult.player1TotalScore}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Player 2 Score</p>
+                            <p className="font-display text-2xl text-[#FF6B6B]">
+                              {matchResult.player2TotalScore}
+                            </p>
+                          </div>
+                        </div>
+                        {battleMatch.winner && (
+                          <div className="mt-4 p-4 rounded-2xl clay-block-mint">
+                            <p className="text-center font-display text-lg text-white">
+                              Winner: {battleMatch.winner.shortName} ({battleMatch.winner.name})
+                            </p>
+                          </div>
+                        )}
+                        {!battleMatch.winner && (
+                          <div className="mt-4 p-4 rounded-2xl clay-block">
+                            <p className="text-center font-display text-lg">
+                              Draw - No Winner
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                  <BattleArena
-                    player1={currentMatch?.player1 || mockAgents[4]}
-                    player2={currentMatch?.player2 || mockAgents[5]}
-                    isLive={!!currentMatch}
-                  />
-                </div>
+                )}
+
                 <Leaderboard agents={displayAgents as typeof mockAgents} />
               </div>
 
               <div className="space-y-8">
                 <BettingPanel
-                  player1={currentMatch?.player1 || mockAgents[4]}
-                  player2={currentMatch?.player2 || mockAgents[5]}
+                  player1={battleMatch?.player1 || selectedPlayer1 || currentMatch?.player1 || mockAgents[0]}
+                  player2={battleMatch?.player2 || selectedPlayer2 || currentMatch?.player2 || mockAgents[1]}
                   player1Odds={1.85}
                   player2Odds={2.15}
                   totalPool={12450}
+                  matchId={battleMatchId || currentMatch?.id || "demo-match-1"}
+                  onBetPlaced={() => {
+                    setHasBets(true);
+                  }}
+                  battleEnded={!!(battleMatch && matchResult && !isBattleRunning)}
                 />
 
                 <div className="p-6 rounded-3xl clay-block">
                   <h3 className="font-display text-xl text-[#5B9BF8] mb-5">Recent Bets</h3>
                   <div className="space-y-3">
                     {[
-                      { user: "0x7a2...f39", amount: 5, currency: "SOL", pick: "Llama", time: "2m ago" },
+                      { user: "0x7a2...f39", amount: 5, currency: "SOL", pick: "G3Mini", time: "2m ago" },
                       { user: "0x9c1...a21", amount: 100, currency: "USDC", pick: "Grok", time: "5m ago" },
-                      { user: "0x3d8...b47", amount: 2.5, currency: "SOL", pick: "Llama", time: "8m ago" },
+                      { user: "0x3d8...b47", amount: 2.5, currency: "SOL", pick: "DeepSeek", time: "8m ago" },
                     ].map((bet, i) => (
                       <motion.div 
                         key={i} 
@@ -491,6 +643,15 @@ export function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Pool Deposit Component - For Testing */}
+      {battleMatchId && (
+        <section className="py-10 px-4 bg-muted/20">
+          <div className="max-w-4xl mx-auto">
+            <PoolDeposit matchId={battleMatchId} />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

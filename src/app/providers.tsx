@@ -2,7 +2,13 @@
 
 import { FC, ReactNode } from 'react';
 import { WalletProvider } from '@/lib/solana/wallet-provider';
+import { Toaster } from 'sonner';
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
-  return <WalletProvider network="devnet">{children}</WalletProvider>;
+  return (
+    <WalletProvider network="devnet">
+      {children}
+      <Toaster position="top-right" richColors />
+    </WalletProvider>
+  );
 };

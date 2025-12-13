@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { AIModel } from "@/lib/types";
 import { Bot, Trophy, XCircle, Zap } from "lucide-react";
+import { AIAvatar } from "./AIAvatar";
 
 type AIAgentCardProps = {
   agent: AIModel;
@@ -50,18 +51,11 @@ export function AIAgentCard({
     >
       <div className="relative z-10">
         <div className="flex items-center gap-4 mb-4">
-          <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center block-shadow-sm ${isActive ? "bg-white/30" : ""}`}
-            style={{ 
-              backgroundColor: isActive ? undefined : `${agent.color}22`,
-              border: "3px solid rgba(0,0,0,0.1)"
-            }}
-          >
-            <Bot 
-              className="w-7 h-7" 
-              style={{ color: isActive ? "white" : agent.color }} 
-            />
-          </div>
+          <AIAvatar 
+            agent={agent} 
+            size="lg" 
+            className={`block-shadow-sm ${isActive ? "bg-white/30" : ""}`}
+          />
           <div>
             <h3
               className={`font-display text-xl ${isActive ? "text-white" : ""}`}

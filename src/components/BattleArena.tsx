@@ -3,12 +3,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { AIModel, Move, RoundResult, PAYOFF_MATRIX } from "@/lib/types";
 import { useState, useEffect } from "react";
+import { AIAvatar } from "./AIAvatar";
 import { Swords, Shield, Skull, Sparkles } from "lucide-react";
 
 type BattleArenaProps = {
   player1: AIModel;
   player2: AIModel;
   isLive?: boolean;
+  currentMatch?: { rounds: RoundResult[]; currentRound: number; status: string } | null;
   onRoundComplete?: (result: RoundResult) => void;
 };
 
@@ -16,52 +18,39 @@ export function BattleArena({
   player1,
   player2,
   isLive = false,
+  currentMatch,
 }: BattleArenaProps) {
-  const [currentRound, setCurrentRound] = useState(1);
-  const [player1Move, setPlayer1Move] = useState<Move | null>(null);
-  const [player2Move, setPlayer2Move] = useState<Move | null>(null);
-  const [player1Score, setPlayer1Score] = useState(0);
-  const [player2Score, setPlayer2Score] = useState(0);
-  const [phase, setPhase] = useState<"thinking" | "reveal" | "result">("thinking");
-  const [history, setHistory] = useState<RoundResult[]>([]);
+  // Safety check
+  if (!player1 || !player2) {
+    return (
+      <div className="p-8 rounded-3xl clay-block">
+        <p className="text-center text-muted-foreground">Loading players...</p>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if (!isLive) return;
-
-    const interval = setInterval(() => {
-      if (phase === "thinking") {
-        const moves: Move[] = ["COOPERATE", "DEFECT"];
-        setPlayer1Move(moves[Math.floor(Math.random() * 2)]);
-        setPlayer2Move(moves[Math.floor(Math.random() * 2)]);
-        setPhase("reveal");
-      } else if (phase === "reveal") {
-        if (player1Move && player2Move) {
-          const key = `${player1Move}_${player2Move}` as keyof typeof PAYOFF_MATRIX;
-          const payoff = PAYOFF_MATRIX[key];
-          setPlayer1Score((s) => s + payoff.player1);
-          setPlayer2Score((s) => s + payoff.player2);
-          setHistory((h) => [
-            ...h,
-            {
-              round: currentRound,
-              player1Move,
-              player2Move,
-              player1Score: payoff.player1,
-              player2Score: payoff.player2,
-            },
-          ]);
-        }
-        setPhase("result");
-      } else {
-        setPlayer1Move(null);
-        setPlayer2Move(null);
-        setCurrentRound((r) => r + 1);
-        setPhase("thinking");
-      }
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [isLive, phase, player1Move, player2Move, currentRound]);
+  // Use currentMatch data if available, otherwise use local state
+  const rounds = currentMatch?.rounds || [];
+  const currentRound = currentMatch?.currentRound || 0;
+  const isCompleted = currentMatch?.status === "completed";
+  
+  // Calculate total scores from rounds
+  const player1Score = rounds.reduce((sum, r) => sum + r.player1Score, 0);
+  const player2Score = rounds.reduce((sum, r) => sum + r.player2Score, 0);
+  
+  // Get current round data
+  const currentRoundData = rounds.length > 0 ? rounds[rounds.length - 1] : null;
+  const player1Move = currentRoundData?.player1Move || null;
+  const player2Move = currentRoundData?.player2Move || null;
+  
+  // Determine phase based on match state
+  // Show "thinking" if we're waiting for the next round
+  const isWaitingForNextRound = isLive && !isCompleted && rounds.length < currentRound;
+  const phase = isLive && !isCompleted 
+    ? (isWaitingForNextRound ? "thinking" : currentRoundData ? "reveal" : "thinking")
+    : isCompleted 
+      ? "result" 
+      : "thinking";
 
   const MoveIcon = ({ move }: { move: Move | null }) => {
     if (!move)
@@ -86,22 +75,18 @@ export function BattleArena({
       <div className="absolute top-6 left-1/2 -translate-x-1/2">
         <div className="clay-badge-coral">
           <span className="font-display text-sm text-white">
-            Round {currentRound}
+            {isCompleted ? `Round ${rounds.length} / ${rounds.length}` : `Round ${currentRound || rounds.length} / 7`}
           </span>
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-8 mt-12">
         <motion.div
-          className="flex-1 text-center"
+          className="flex-1 text-center flex flex-col items-center"
           animate={{ x: phase === "reveal" ? 15 : 0 }}
         >
-          <div
-            className="w-24 h-24 mx-auto mb-4 rounded-3xl flex items-center justify-center clay-block-mint"
-          >
-            <span className="font-display text-3xl text-white">
-              {player1.shortName.charAt(0)}
-            </span>
+          <div className="mb-4 flex justify-center">
+            <AIAvatar agent={player1} size="xl" className="clay-block-mint" />
           </div>
           <h3 className="font-display text-xl mb-2 text-[#4ECDC4]">
             {player1.shortName}
@@ -142,15 +127,11 @@ export function BattleArena({
         </div>
 
         <motion.div
-          className="flex-1 text-center"
+          className="flex-1 text-center flex flex-col items-center"
           animate={{ x: phase === "reveal" ? -15 : 0 }}
         >
-          <div
-            className="w-24 h-24 mx-auto mb-4 rounded-3xl flex items-center justify-center clay-block-coral"
-          >
-            <span className="font-display text-3xl text-white">
-              {player2.shortName.charAt(0)}
-            </span>
+          <div className="mb-4 flex justify-center">
+            <AIAvatar agent={player2} size="xl" className="clay-block-coral" />
           </div>
           <h3 className="font-display text-xl mb-2 text-[#FF6B6B]">
             {player2.shortName}
@@ -161,18 +142,24 @@ export function BattleArena({
           <AnimatePresence mode="wait">
             <motion.div
               key={`${currentRound}-${player2Move}`}
-              initial={{ scale: 0, rotate: 180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: -180 }}
+              initial={{ scale: 0, rotate: 180, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 0, rotate: -180, opacity: 0 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
               className="flex justify-center"
             >
-              <MoveIcon move={phase !== "thinking" ? player2Move : null} />
+              <MoveIcon move={phase !== "thinking" && currentRoundData ? player2Move : null} />
             </motion.div>
           </AnimatePresence>
-          {player2Move && phase !== "thinking" && (
-            <p className={`mt-3 font-display text-sm ${player2Move === "COOPERATE" ? "text-[#4ECDC4]" : "text-[#FF6B6B]"}`}>
+          {player2Move && phase !== "thinking" && currentRoundData && (
+            <motion.p 
+              className={`mt-3 font-display text-sm ${player2Move === "COOPERATE" ? "text-[#4ECDC4]" : "text-[#FF6B6B]"}`}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               {player2Move}
-            </p>
+            </motion.p>
           )}
         </motion.div>
       </div>
@@ -182,7 +169,7 @@ export function BattleArena({
           <Sparkles className="w-4 h-4 text-[#FFE66D]" /> Match History
         </h4>
         <div className="flex gap-2 flex-wrap">
-          {history.slice(-10).map((round, i) => (
+          {rounds.map((round, i) => (
             <div
               key={i}
               className={`w-12 h-12 rounded-xl flex items-center justify-center text-sm font-display text-white
@@ -201,20 +188,47 @@ export function BattleArena({
 
       {phase === "thinking" && isLive && (
         <motion.div
-          className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-3xl"
+          className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-3xl z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <div className="text-center">
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-              className="w-16 h-16 mx-auto mb-4 rounded-2xl clay-block-yellow flex items-center justify-center"
+              animate={{ 
+                rotate: 360,
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                rotate: { repeat: Infinity, duration: 2, ease: "linear" },
+                scale: { repeat: Infinity, duration: 1.5, ease: "easeInOut" }
+              }}
+              className="w-20 h-20 mx-auto mb-6 rounded-3xl clay-block-yellow flex items-center justify-center shadow-lg"
             >
-              <span className="text-2xl">🤔</span>
+              <motion.span 
+                className="text-4xl"
+                animate={{ 
+                  rotate: [0, 10, -10, 0],
+                }}
+                transition={{ 
+                  repeat: Infinity, 
+                  duration: 1,
+                  ease: "easeInOut"
+                }}
+              >
+                🤔
+              </motion.span>
             </motion.div>
-            <p className="text-[#FF6B6B] font-display text-lg">AIs Thinking...</p>
+            <motion.p 
+              className="text-[#FF6B6B] font-display text-xl mb-2"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              AIs Thinking...
+            </motion.p>
+            <p className="text-sm text-muted-foreground font-medium">
+              Analyzing opponent's strategy...
+            </p>
           </div>
         </motion.div>
       )}

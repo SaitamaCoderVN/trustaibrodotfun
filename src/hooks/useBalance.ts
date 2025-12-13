@@ -28,11 +28,11 @@ export function useBalance() {
     }
   }, [connection, publicKey, connected]);
 
+  // Only fetch on mount or when wallet connects/disconnects
+  // No polling to avoid rate limits
   useEffect(() => {
     fetchBalance();
-    const interval = setInterval(fetchBalance, 30000);
-    return () => clearInterval(interval);
-  }, [fetchBalance]);
+  }, [publicKey, connected]); // Only fetch when wallet state changes
 
   return { balance, loading, refresh: fetchBalance };
 }

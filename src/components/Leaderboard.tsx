@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import { AIModel } from "@/lib/types";
 import { Trophy, Medal, Crown, TrendingUp, Activity } from "lucide-react";
+import { AIAvatar } from "./AIAvatar";
 
 type LeaderboardProps = {
   agents: AIModel[];
@@ -11,9 +13,12 @@ type LeaderboardProps = {
 const RANK_COLORS = ["clay-block-yellow", "clay-block", "clay-block-orange"];
 
 export function Leaderboard({ agents }: LeaderboardProps) {
-  const sortedAgents = [...agents].sort(
-    (a, b) => b.totalScore - a.totalScore || b.wins - a.wins
-  );
+  // Use useMemo to ensure consistent sorting between server and client
+  const sortedAgents = useMemo(() => {
+    return [...agents].sort(
+      (a, b) => b.totalScore - a.totalScore || b.wins - a.wins
+    );
+  }, [agents]);
 
   const getRankIcon = (index: number) => {
     switch (index) {
@@ -66,17 +71,11 @@ export function Leaderboard({ agents }: LeaderboardProps) {
               {getRankIcon(index)}
             </div>
 
-            <div
-              className={`w-12 h-12 rounded-xl flex items-center justify-center ${index < 3 ? "bg-white/30" : ""}`}
-              style={{ backgroundColor: index >= 3 ? `${agent.color}22` : undefined }}
-            >
-              <span
-                className={`font-display text-lg ${index < 3 ? "text-white" : ""}`}
-                style={{ color: index >= 3 ? agent.color : undefined }}
-              >
-                {agent.shortName.charAt(0)}
-              </span>
-            </div>
+            <AIAvatar 
+              agent={agent} 
+              size="lg" 
+              className={index < 3 ? "bg-white/30" : ""}
+            />
 
             <div className="flex-1 min-w-0">
               <p 

@@ -1,6 +1,6 @@
 import { Move, RoundResult, AIModel, PAYOFF_MATRIX } from './types';
 
-export const ROUNDS_PER_MATCH = 50;
+export const ROUNDS_PER_MATCH = 7;
 
 export interface AgentInput {
   opponent_last_move: 'C' | 'D' | null;
@@ -92,6 +92,7 @@ export async function runMatch(
     const player1Input = buildAgentInput(rounds, roundNum, true);
     const player2Input = buildAgentInput(rounds, roundNum, false);
 
+    // Get moves from both players (with delay for "thinking" visualization)
     const [player1Output, player2Output] = await Promise.all([
       getPlayer1Move(player1Input).catch(() => ({ move: 'D' as const })),
       getPlayer2Move(player2Input).catch(() => ({ move: 'D' as const })),
@@ -113,8 +114,9 @@ export async function runMatch(
     player1TotalScore += player1Score;
     player2TotalScore += player2Score;
 
+    // Call onRoundComplete callback (which may include delay)
     if (onRoundComplete) {
-      onRoundComplete(roundResult);
+      await onRoundComplete(roundResult);
     }
   }
 
