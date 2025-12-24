@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { AIModel } from "@/lib/types";
 import { ChevronRight, Zap, Trophy } from "lucide-react";
+import { AIAvatar } from "./AIAvatar";
 
 type BracketMatch = {
   id: string;
@@ -25,28 +26,28 @@ export function TournamentBracket({
   const rounds = Array.from(new Set(matches.map((m) => m.round))).sort();
 
   const getRoundName = (round: number, totalRounds: number) => {
-    if (round === totalRounds) return "Finals";
-    if (round === totalRounds - 1) return "Semi-Finals";
-    if (round === totalRounds - 2) return "Quarter-Finals";
-    return `Round ${round}`;
+    if (round === totalRounds) return "FINALS";
+    if (round === totalRounds - 1) return "SEMI-FINALS";
+    if (round === totalRounds - 2) return "QUARTER-FINALS";
+    return `ROUND ${round}`;
   };
 
   return (
-    <div className="p-8 rounded-3xl clay-block overflow-x-auto">
+    <div className="p-8 pixel-box overflow-x-auto">
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-12 h-12 rounded-2xl clay-block-purple flex items-center justify-center">
-          <Trophy className="w-6 h-6 text-white" />
+        <div className="w-12 h-12 pixel-box-purple flex items-center justify-center">
+          <Trophy className="w-6 h-6" />
         </div>
-        <h3 className="font-display text-2xl text-[#A66CFF]">
-          Tournament Bracket
+        <h3 className="font-pixel text-sm text-[var(--pixel-purple)]">
+          TOURNAMENT BRACKET
         </h3>
       </div>
 
       <div className="flex gap-10 min-w-max">
         {rounds.map((round) => (
           <div key={round} className="flex flex-col gap-6">
-            <div className="clay-badge text-center">
-              <span className="font-display text-sm">
+            <div className="pixel-badge text-center">
+              <span className="font-pixel text-xs">
                 {getRoundName(round, rounds.length)}
               </span>
             </div>
@@ -63,26 +64,26 @@ export function TournamentBracket({
                     whileHover={{ scale: 1.03, y: -4 }}
                     onClick={() => onMatchClick?.(match.id)}
                     className={`
-                      w-56 p-4 rounded-2xl cursor-pointer transition-all
-                      ${match.status === "live" ? "clay-block-coral animate-pulse-block" : "clay-block"}
+                      w-56 p-4 cursor-pointer transition-all
+                      ${match.status === "live" ? "pixel-box-pink animate-pulse" : "pixel-box"}
                     `}
                   >
                     {match.status === "live" && (
                       <div className="flex items-center gap-2 text-white text-xs mb-3 justify-center">
-                        <div className="w-8 h-8 rounded-xl bg-white/30 flex items-center justify-center">
+                        <div className="w-8 h-8 bg-white/30 border-2 border-black flex items-center justify-center">
                           <Zap className="w-4 h-4" />
                         </div>
-                        <span className="font-display">LIVE NOW</span>
+                        <span className="font-pixel text-xs">LIVE</span>
                       </div>
                     )}
 
                     <div className="space-y-3">
                       <div
                         className={`
-                          flex items-center gap-3 p-3 rounded-xl transition-all
+                          flex items-center gap-3 p-3 transition-all border-2 border-black
                           ${match.winner?.id === match.player1?.id 
-                            ? "clay-block-mint" 
-                            : match.status === "live" ? "bg-white/20" : "bg-muted/30"}
+                            ? "bg-[var(--pixel-green)]" 
+                            : match.status === "live" ? "bg-white/20" : "bg-gray-100"}
                         `}
                       >
                         {match.player1 ? (
@@ -93,19 +94,19 @@ export function TournamentBracket({
                               className={match.winner?.id === match.player1?.id ? "bg-white/30" : ""}
                             />
                             <span
-                              className={`text-sm font-display truncate flex-1 ${match.winner?.id === match.player1?.id ? "text-white" : ""}`}
+                              className={`text-xs font-pixel truncate flex-1 ${match.winner?.id === match.player1?.id ? "text-white" : ""}`}
                               style={{ color: match.winner?.id !== match.player1?.id ? match.player1.color : undefined }}
                             >
                               {match.player1.shortName}
                             </span>
                             {match.winner?.id === match.player1.id && (
-                              <div className="w-6 h-6 rounded-lg bg-white/30 flex items-center justify-center">
+                              <div className="w-6 h-6 bg-white/30 border-2 border-black flex items-center justify-center">
                                 <ChevronRight className="w-4 h-4 text-white" />
                               </div>
                             )}
                           </>
                         ) : (
-                          <span className="text-sm text-muted-foreground font-display p-2">
+                          <span className="text-xs text-muted-foreground font-pixel p-2">
                             TBD
                           </span>
                         )}
@@ -113,10 +114,10 @@ export function TournamentBracket({
 
                       <div
                         className={`
-                          flex items-center gap-3 p-3 rounded-xl transition-all
+                          flex items-center gap-3 p-3 transition-all border-2 border-black
                           ${match.winner?.id === match.player2?.id 
-                            ? "clay-block-mint" 
-                            : match.status === "live" ? "bg-white/20" : "bg-muted/30"}
+                            ? "bg-[var(--pixel-green)]" 
+                            : match.status === "live" ? "bg-white/20" : "bg-gray-100"}
                         `}
                       >
                         {match.player2 ? (
@@ -127,19 +128,19 @@ export function TournamentBracket({
                               className={match.winner?.id === match.player2?.id ? "bg-white/30" : ""}
                             />
                             <span
-                              className={`text-sm font-display truncate flex-1 ${match.winner?.id === match.player2?.id ? "text-white" : ""}`}
+                              className={`text-xs font-pixel truncate flex-1 ${match.winner?.id === match.player2?.id ? "text-white" : ""}`}
                               style={{ color: match.winner?.id !== match.player2?.id ? match.player2.color : undefined }}
                             >
                               {match.player2.shortName}
                             </span>
                             {match.winner?.id === match.player2.id && (
-                              <div className="w-6 h-6 rounded-lg bg-white/30 flex items-center justify-center">
+                              <div className="w-6 h-6 bg-white/30 border-2 border-black flex items-center justify-center">
                                 <ChevronRight className="w-4 h-4 text-white" />
                               </div>
                             )}
                           </>
                         ) : (
-                          <span className="text-sm text-muted-foreground font-display p-2">
+                          <span className="text-xs text-muted-foreground font-pixel p-2">
                             TBD
                           </span>
                         )}

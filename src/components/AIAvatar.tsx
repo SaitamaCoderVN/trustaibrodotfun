@@ -24,10 +24,10 @@ export function AIAvatar({ agent, size = "md", className = "", showFallback = tr
   if (imageError && showFallback) {
     return (
       <div
-        className={`${sizeClass} rounded-xl flex items-center justify-center font-display text-white ${className}`}
+        className={`${sizeClass} border-4 border-black flex items-center justify-center font-pixel text-white ${className}`}
         style={{ backgroundColor: agent.color }}
       >
-        <span className={size === "xl" ? "text-3xl" : size === "lg" ? "text-lg" : "text-sm"}>
+        <span className={size === "xl" ? "text-xl" : size === "lg" ? "text-sm" : "text-xs"}>
           {agent.shortName.charAt(0)}
         </span>
       </div>
@@ -36,13 +36,14 @@ export function AIAvatar({ agent, size = "md", className = "", showFallback = tr
 
   return (
     <div
-      className={`${sizeClass} rounded-xl overflow-hidden flex items-center justify-center ${className}`}
+      className={`${sizeClass} border-4 border-black overflow-hidden flex items-center justify-center ${className}`}
       style={{ backgroundColor: agent.color }}
     >
       <img
         src={agent.avatar}
         alt={agent.name}
         className="w-full h-full object-cover"
+        style={{ imageRendering: 'pixelated' }}
         onError={() => setImageError(true)}
       />
     </div>

@@ -13,13 +13,15 @@ type AIAgentCardProps = {
   size?: "sm" | "md" | "lg";
 };
 
-const CLAY_COLORS: Record<string, string> = {
-  "#10a37f": "clay-block-mint",
-  "#cc785c": "clay-block-orange",
-  "#4285f4": "clay-block-blue",
-  "#536dfe": "clay-block-purple",
-  "#0668e1": "clay-block-blue",
-  "#1da1f2": "clay-block-coral",
+const PIXEL_COLORS: Record<string, string> = {
+  "#10a37f": "pixel-box-green",
+  "#cc785c": "pixel-box-orange",
+  "#4285f4": "pixel-box-blue",
+  "#536dfe": "pixel-box-purple",
+  "#0668e1": "pixel-box-blue",
+  "#1da1f2": "pixel-box-pink",
+  "#d4a574": "pixel-box-orange",
+  "#7c3aed": "pixel-box-purple",
 };
 
 export function AIAgentCard({
@@ -35,17 +37,17 @@ export function AIAgentCard({
     lg: "p-6",
   };
 
-  const clayClass = CLAY_COLORS[agent.color] || "clay-block";
+  const pixelClass = PIXEL_COLORS[agent.color] || "pixel-box";
 
   return (
     <motion.div
-      whileHover={{ scale: 1.03, y: -6, rotate: 1 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`
-        relative overflow-hidden rounded-3xl cursor-pointer
+        relative overflow-hidden cursor-pointer
         ${sizeClasses[size]}
-        ${isActive ? clayClass : "clay-block"}
+        ${isActive ? pixelClass : "pixel-box"}
         transition-all duration-200
       `}
     >
@@ -54,28 +56,28 @@ export function AIAgentCard({
           <AIAvatar 
             agent={agent} 
             size="lg" 
-            className={`block-shadow-sm ${isActive ? "bg-white/30" : ""}`}
+            className={`border-4 border-black ${isActive ? "bg-white/30" : ""}`}
           />
           <div>
             <h3
-              className={`font-display text-xl ${isActive ? "text-white" : ""}`}
+              className={`font-pixel text-sm ${isActive ? "text-white" : ""}`}
               style={{ color: isActive ? undefined : agent.color }}
             >
               {agent.shortName}
             </h3>
-            <p className={`text-sm ${isActive ? "text-white/80" : "text-muted-foreground"}`}>
+            <p className={`font-pixel-body text-sm ${isActive ? "text-white/80" : "text-muted-foreground"}`}>
               {agent.name}
             </p>
           </div>
         </div>
 
-        <div className={`mb-4 p-3 rounded-xl ${isActive ? "bg-white/20" : "bg-muted/50"}`}>
-          <div className={`flex items-center gap-2 text-sm mb-1 ${isActive ? "text-white/80" : "text-muted-foreground"}`}>
+        <div className={`mb-4 p-3 border-4 border-black ${isActive ? "bg-white/20" : "bg-gray-50"}`}>
+          <div className={`flex items-center gap-2 text-xs mb-1 ${isActive ? "text-white/80" : "text-muted-foreground"}`}>
             <Zap className="w-4 h-4" />
-            <span className="font-semibold">Strategy</span>
+            <span className="font-pixel text-xs">STRATEGY</span>
           </div>
           <p 
-            className={`text-base font-bold ${isActive ? "text-white" : ""}`}
+            className={`font-pixel-body ${isActive ? "text-white" : ""}`}
             style={{ color: isActive ? undefined : agent.color }}
           >
             {agent.strategy}
@@ -83,26 +85,26 @@ export function AIAgentCard({
         </div>
 
         {showStats && (
-          <div className={`grid grid-cols-3 gap-3 pt-4 border-t-2 ${isActive ? "border-white/30" : "border-border/50"}`}>
-            <div className={`text-center p-2 rounded-xl ${isActive ? "bg-white/20" : "bg-[#4ECDC4]/10"}`}>
-              <div className={`flex items-center justify-center gap-1 ${isActive ? "text-white" : "text-[#4ECDC4]"}`}>
+          <div className={`grid grid-cols-3 gap-3 pt-4 border-t-4 ${isActive ? "border-white/30" : "border-black"}`}>
+            <div className={`text-center p-2 border-4 border-black ${isActive ? "bg-white/20" : "bg-[var(--pixel-green)]/10"}`}>
+              <div className={`flex items-center justify-center gap-1 ${isActive ? "text-white" : "text-[var(--pixel-green)]"}`}>
                 <Trophy className="w-4 h-4" />
-                <span className="font-display text-lg">{agent.wins}</span>
+                <span className="font-pixel text-sm">{agent.wins}</span>
               </div>
-              <span className={`text-xs font-semibold ${isActive ? "text-white/80" : "text-muted-foreground"}`}>Wins</span>
+              <span className={`font-pixel text-xs ${isActive ? "text-white/80" : "text-muted-foreground"}`}>WINS</span>
             </div>
-            <div className={`text-center p-2 rounded-xl ${isActive ? "bg-white/20" : "bg-[#FF6B6B]/10"}`}>
-              <div className={`flex items-center justify-center gap-1 ${isActive ? "text-white" : "text-[#FF6B6B]"}`}>
+            <div className={`text-center p-2 border-4 border-black ${isActive ? "bg-white/20" : "bg-[var(--pixel-pink)]/10"}`}>
+              <div className={`flex items-center justify-center gap-1 ${isActive ? "text-white" : "text-[var(--pixel-pink)]"}`}>
                 <XCircle className="w-4 h-4" />
-                <span className="font-display text-lg">{agent.losses}</span>
+                <span className="font-pixel text-sm">{agent.losses}</span>
               </div>
-              <span className={`text-xs font-semibold ${isActive ? "text-white/80" : "text-muted-foreground"}`}>Losses</span>
+              <span className={`font-pixel text-xs ${isActive ? "text-white/80" : "text-muted-foreground"}`}>LOSS</span>
             </div>
-            <div className={`text-center p-2 rounded-xl ${isActive ? "bg-white/20" : "bg-[#A66CFF]/10"}`}>
-              <span className={`font-display text-lg ${isActive ? "text-white" : "text-[#A66CFF]"}`}>
+            <div className={`text-center p-2 border-4 border-black ${isActive ? "bg-white/20" : "bg-[var(--pixel-purple)]/10"}`}>
+              <span className={`font-pixel text-sm ${isActive ? "text-white" : "text-[var(--pixel-purple)]"}`}>
                 {agent.totalScore}
               </span>
-              <p className={`text-xs font-semibold ${isActive ? "text-white/80" : "text-muted-foreground"}`}>Score</p>
+              <p className={`font-pixel text-xs ${isActive ? "text-white/80" : "text-muted-foreground"}`}>PTS</p>
             </div>
           </div>
         )}
@@ -114,7 +116,7 @@ export function AIAgentCard({
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
-          <div className="w-3 h-3 rounded-full bg-white block-shadow-sm" />
+          <div className="w-3 h-3 bg-white border-2 border-black" />
         </motion.div>
       )}
     </motion.div>

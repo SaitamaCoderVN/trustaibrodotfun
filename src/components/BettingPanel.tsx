@@ -244,14 +244,14 @@ export function BettingPanel({
   // If user has lost (not draw), show message
   if (hasLost) {
     return (
-      <div className="p-6 rounded-3xl clay-block">
+      <div className="p-6 pixel-box">
         <div className="text-center py-8">
-          <XCircle className="w-16 h-16 mx-auto mb-4 text-[#FF6B6B]" />
-          <h3 className="font-display text-2xl text-[#FF6B6B] mb-2">Bet Lost</h3>
-          <p className="text-muted-foreground font-medium">
+          <XCircle className="w-16 h-16 mx-auto mb-4 text-[var(--pixel-pink)]" />
+          <h3 className="font-pixel text-lg text-[var(--pixel-pink)] mb-2">BET LOST</h3>
+          <p className="text-muted-foreground font-pixel-body">
             Better luck next time!
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-2 font-pixel-body">
             You bet on {userBet.aiIndex === 0 ? player1.shortName : player2.shortName}, 
             but {market.winningAi === 0 ? player1.shortName : player2.shortName} won.
           </p>
@@ -264,25 +264,25 @@ export function BettingPanel({
   // Check this BEFORE checking hasWon/hasLost to ensure draw takes priority
   if (isDraw && hasBet && userBet && !userBet.claimed) {
     return (
-      <div className="p-6 rounded-3xl clay-block">
+      <div className="p-6 pixel-box">
         <div className="flex justify-end mb-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-xl clay-block-sm hover:bg-opacity-80 transition-opacity disabled:opacity-50"
+            className="p-2 pixel-box hover:bg-opacity-80 transition-opacity disabled:opacity-50"
             title="Refresh data"
           >
-            <RefreshCw className={`w-4 h-4 text-[#A66CFF] ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[var(--pixel-purple)] ${isLoading ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
         <div className="text-center py-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full clay-block flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 pixel-box flex items-center justify-center">
             <span className="text-2xl">🤝</span>
           </div>
-          <h3 className="font-display text-2xl mb-2">Match Draw</h3>
-          <p className="text-muted-foreground font-medium mb-4">
+          <h3 className="font-pixel text-lg mb-2">MATCH DRAW</h3>
+          <p className="text-muted-foreground font-pixel-body mb-4">
             The match ended in a draw. You can claim your bet refund.
           </p>
           <motion.button
@@ -290,17 +290,17 @@ export function BettingPanel({
             whileTap={{ scale: 0.98 }}
             onClick={handleClaimWinnings}
             disabled={isClaiming}
-            className="w-full py-5 rounded-2xl font-display text-lg flex items-center justify-center gap-2 clay-btn text-white disabled:opacity-50"
+            className="w-full py-5 font-pixel text-sm flex items-center justify-center gap-2 pixel-btn disabled:opacity-50"
           >
             {isClaiming ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Claiming...
+                CLAIMING...
               </>
             ) : (
               <>
                 <Wallet className="w-5 h-5" />
-                Claim Refund
+                CLAIM REFUND
               </>
             )}
           </motion.button>
@@ -312,23 +312,23 @@ export function BettingPanel({
   // If user can claim (winner), show claim button
   if (canClaim && hasWon) {
     return (
-      <div className="p-6 rounded-3xl clay-block">
+      <div className="p-6 pixel-box">
         <div className="flex justify-end mb-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-xl clay-block-sm hover:bg-opacity-80 transition-opacity disabled:opacity-50"
+            className="p-2 pixel-box hover:bg-opacity-80 transition-opacity disabled:opacity-50"
             title="Refresh data"
           >
-            <RefreshCw className={`w-4 h-4 text-[#A66CFF] ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[var(--pixel-purple)] ${isLoading ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
         <div className="text-center py-8">
-          <CheckCircle className="w-16 h-16 mx-auto mb-4 text-[#4ECDC4]" />
-          <h3 className="font-display text-2xl text-[#4ECDC4] mb-2">You Won!</h3>
-          <p className="text-muted-foreground font-medium mb-4">
+          <CheckCircle className="w-16 h-16 mx-auto mb-4 text-[var(--pixel-green)]" />
+          <h3 className="font-pixel text-lg text-[var(--pixel-green)] mb-2">YOU WON!</h3>
+          <p className="text-muted-foreground font-pixel-body mb-4">
             Congratulations! Your bet was successful. Claim 2x your bet amount.
           </p>
           <motion.button
@@ -336,17 +336,17 @@ export function BettingPanel({
             whileTap={{ scale: 0.98 }}
             onClick={handleClaimWinnings}
             disabled={isClaiming}
-            className="w-full py-5 rounded-2xl font-display text-lg flex items-center justify-center gap-2 clay-btn-mint text-white disabled:opacity-50"
+            className="w-full py-5 font-pixel text-sm flex items-center justify-center gap-2 pixel-btn-green disabled:opacity-50"
           >
             {isClaiming ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Claiming...
+                CLAIMING...
               </>
             ) : (
               <>
                 <Wallet className="w-5 h-5" />
-                Claim Winnings
+                CLAIM WINNINGS
               </>
             )}
           </motion.button>
@@ -358,23 +358,23 @@ export function BettingPanel({
   // If user has already claimed
   if (hasWon && userBet?.claimed) {
     return (
-      <div className="p-6 rounded-3xl clay-block">
+      <div className="p-6 pixel-box">
         <div className="flex justify-end mb-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-xl clay-block-sm hover:bg-opacity-80 transition-opacity disabled:opacity-50"
+            className="p-2 pixel-box hover:bg-opacity-80 transition-opacity disabled:opacity-50"
             title="Refresh data"
           >
-            <RefreshCw className={`w-4 h-4 text-[#A66CFF] ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[var(--pixel-purple)] ${isLoading ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
         <div className="text-center py-8">
-          <CheckCircle className="w-16 h-16 mx-auto mb-4 text-[#4ECDC4]" />
-          <h3 className="font-display text-2xl text-[#4ECDC4] mb-2">Winnings Claimed</h3>
-          <p className="text-muted-foreground font-medium">
+          <CheckCircle className="w-16 h-16 mx-auto mb-4 text-[var(--pixel-green)]" />
+          <h3 className="font-pixel text-lg text-[var(--pixel-green)] mb-2">CLAIMED</h3>
+          <p className="text-muted-foreground font-pixel-body">
             You have already claimed your winnings.
           </p>
         </div>
@@ -385,10 +385,10 @@ export function BettingPanel({
   // Show loading state while checking market
   if (isLoading && !market) {
     return (
-      <div className="p-6 rounded-3xl clay-block">
+      <div className="p-6 pixel-box">
         <div className="text-center py-8">
-          <Loader2 className="w-8 h-8 mx-auto mb-4 animate-spin text-[#A66CFF]" />
-          <p className="text-muted-foreground">Loading market...</p>
+          <Loader2 className="w-8 h-8 mx-auto mb-4 animate-spin text-[var(--pixel-purple)]" />
+          <p className="text-muted-foreground font-pixel-body">Loading market...</p>
         </div>
       </div>
     );
@@ -396,32 +396,32 @@ export function BettingPanel({
 
   // Normal betting panel
   return (
-    <div className="p-6 rounded-3xl clay-block">
+    <div className="p-6 pixel-box">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="font-display text-xl text-[#A66CFF]">
-          Place Your Bet
+        <h3 className="font-pixel text-sm text-[var(--pixel-purple)]">
+          PLACE YOUR BET
         </h3>
         <div className="flex items-center gap-3">
-          <div className="clay-badge flex items-center gap-2">
+          <div className="pixel-badge flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
-            <span className="font-display">{totalPool.toLocaleString()}</span>
+            <span className="font-pixel text-xs">{totalPool.toLocaleString()}</span>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={isLoading}
-            className="p-2 rounded-xl clay-block-sm hover:bg-opacity-80 transition-opacity disabled:opacity-50"
+            className="p-2 pixel-box hover:bg-opacity-80 transition-opacity disabled:opacity-50"
             title="Refresh data"
           >
-            <RefreshCw className={`w-4 h-4 text-[#A66CFF] ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[var(--pixel-purple)] ${isLoading ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
       </div>
 
       {hasBet && !market?.isSettled && (
-        <div className="mb-4 p-4 rounded-2xl clay-block-yellow">
-          <p className="text-sm font-medium">
+        <div className="mb-4 p-4 pixel-box-yellow">
+          <p className="text-sm font-pixel-body">
             You have an active bet: {userBet.amount.toNumber() / 1e9} SOL on{" "}
             {userBet.aiIndex === 0 ? player1.shortName : player2.shortName}
           </p>
@@ -429,8 +429,8 @@ export function BettingPanel({
       )}
 
       {!market && connected && (
-        <div className="mb-4 p-4 rounded-2xl clay-block-yellow">
-          <p className="text-sm font-medium mb-2">
+        <div className="mb-4 p-4 pixel-box-yellow">
+          <p className="text-sm font-pixel-body mb-2">
             Market will be initialized automatically when you place your first bet.
           </p>
         </div>
@@ -443,8 +443,8 @@ export function BettingPanel({
           onClick={() => setSelectedPlayer(player1.id)}
           disabled={hasBet || market?.isSettled}
           className={`
-            p-5 rounded-2xl transition-all
-            ${selectedPlayer === player1.id ? "clay-block-mint" : "clay-block"}
+            p-5 transition-all
+            ${selectedPlayer === player1.id ? "pixel-box-green" : "pixel-box"}
             ${hasBet || market?.isSettled ? "opacity-50 cursor-not-allowed" : ""}
           `}
         >
@@ -453,23 +453,23 @@ export function BettingPanel({
               <AIAvatar 
                 agent={player1} 
                 size="lg" 
-                className={selectedPlayer === player1.id ? "bg-white/30 clay-block-mint" : "clay-block-mint"} 
+                className={`border-4 border-black ${selectedPlayer === player1.id ? "bg-white/30" : ""}`} 
               />
             </div>
-            <p className={`font-display text-lg mb-2 ${selectedPlayer === player1.id ? "text-white" : "text-[#4ECDC4]"}`}>
+            <p className={`font-pixel text-xs mb-2 ${selectedPlayer === player1.id ? "text-white" : "text-[var(--pixel-green)]"}`}>
               {player1.shortName}
             </p>
             <div className="flex items-center justify-center gap-1">
               {player1Odds > 2 ? (
-                <TrendingUp className={`w-4 h-4 ${selectedPlayer === player1.id ? "text-white" : "text-[#4ECDC4]"}`} />
+                <TrendingUp className={`w-4 h-4 ${selectedPlayer === player1.id ? "text-white" : "text-[var(--pixel-green)]"}`} />
               ) : (
-                <TrendingDown className={`w-4 h-4 ${selectedPlayer === player1.id ? "text-white" : "text-[#FF6B6B]"}`} />
+                <TrendingDown className={`w-4 h-4 ${selectedPlayer === player1.id ? "text-white" : "text-[var(--pixel-pink)]"}`} />
               )}
-              <span className={`text-xl font-display ${selectedPlayer === player1.id ? "text-white" : "text-[#A66CFF]"}`}>
+              <span className={`text-xl font-pixel ${selectedPlayer === player1.id ? "text-white" : "text-[var(--pixel-purple)]"}`}>
                 {player1Odds.toFixed(2)}x
               </span>
             </div>
-            <p className={`text-xs mt-1 ${selectedPlayer === player1.id ? "text-white/80" : "text-muted-foreground"}`}>
+            <p className={`text-xs mt-1 font-pixel-body ${selectedPlayer === player1.id ? "text-white/80" : "text-muted-foreground"}`}>
               {((1 / player1Odds) * 100).toFixed(0)}% implied
             </p>
           </div>
@@ -481,8 +481,8 @@ export function BettingPanel({
           onClick={() => setSelectedPlayer(player2.id)}
           disabled={hasBet || market?.isSettled}
           className={`
-            p-5 rounded-2xl transition-all
-            ${selectedPlayer === player2.id ? "clay-block-coral" : "clay-block"}
+            p-5 transition-all
+            ${selectedPlayer === player2.id ? "pixel-box-pink" : "pixel-box"}
             ${hasBet || market?.isSettled ? "opacity-50 cursor-not-allowed" : ""}
           `}
         >
@@ -491,23 +491,23 @@ export function BettingPanel({
               <AIAvatar 
                 agent={player2} 
                 size="lg" 
-                className={selectedPlayer === player2.id ? "bg-white/30 clay-block-coral" : "clay-block-coral"} 
+                className={`border-4 border-black ${selectedPlayer === player2.id ? "bg-white/30" : ""}`} 
               />
             </div>
-            <p className={`font-display text-lg mb-2 ${selectedPlayer === player2.id ? "text-white" : "text-[#FF6B6B]"}`}>
+            <p className={`font-pixel text-xs mb-2 ${selectedPlayer === player2.id ? "text-white" : "text-[var(--pixel-pink)]"}`}>
               {player2.shortName}
             </p>
             <div className="flex items-center justify-center gap-1">
               {player2Odds > 2 ? (
-                <TrendingUp className={`w-4 h-4 ${selectedPlayer === player2.id ? "text-white" : "text-[#4ECDC4]"}`} />
+                <TrendingUp className={`w-4 h-4 ${selectedPlayer === player2.id ? "text-white" : "text-[var(--pixel-green)]"}`} />
               ) : (
-                <TrendingDown className={`w-4 h-4 ${selectedPlayer === player2.id ? "text-white" : "text-[#FF6B6B]"}`} />
+                <TrendingDown className={`w-4 h-4 ${selectedPlayer === player2.id ? "text-white" : "text-[var(--pixel-pink)]"}`} />
               )}
-              <span className={`text-xl font-display ${selectedPlayer === player2.id ? "text-white" : "text-[#A66CFF]"}`}>
+              <span className={`text-xl font-pixel ${selectedPlayer === player2.id ? "text-white" : "text-[var(--pixel-purple)]"}`}>
                 {player2Odds.toFixed(2)}x
               </span>
             </div>
-            <p className={`text-xs mt-1 ${selectedPlayer === player2.id ? "text-white/80" : "text-muted-foreground"}`}>
+            <p className={`text-xs mt-1 font-pixel-body ${selectedPlayer === player2.id ? "text-white/80" : "text-muted-foreground"}`}>
               {((1 / player2Odds) * 100).toFixed(0)}% implied
             </p>
           </div>
@@ -516,7 +516,7 @@ export function BettingPanel({
 
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-sm text-muted-foreground font-semibold">Bet Amount (SOL)</label>
+          <label className="text-sm text-muted-foreground font-pixel">BET (SOL)</label>
         </div>
 
         <div className="relative">
@@ -539,7 +539,7 @@ export function BettingPanel({
             }}
             placeholder="0.00"
             disabled={hasBet || market?.isSettled}
-            className="w-full pl-12 pr-4 py-4 rounded-2xl clay-input text-foreground focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all font-display text-lg disabled:opacity-50"
+            className="w-full pl-12 pr-4 py-4 pixel-input text-foreground focus:outline-none transition-all font-pixel-body text-lg disabled:opacity-50"
           />
         </div>
 
@@ -551,7 +551,7 @@ export function BettingPanel({
               whileTap={{ scale: 0.95 }}
               onClick={() => setBetAmount(amount)}
               disabled={hasBet || market?.isSettled}
-              className="flex-1 py-3 rounded-xl clay-block text-sm font-display hover:text-[#FF6B6B] transition-colors disabled:opacity-50"
+              className="flex-1 py-3 pixel-box text-sm font-pixel hover:text-[var(--pixel-pink)] transition-colors disabled:opacity-50"
             >
               {amount}
             </motion.button>
@@ -563,13 +563,13 @@ export function BettingPanel({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl clay-block-yellow mb-4"
+          className="p-4 pixel-box-yellow mb-4"
         >
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">
-              Potential Payout
+            <span className="text-sm font-pixel">
+              PAYOUT
             </span>
-            <span className="text-2xl font-display">
+            <span className="text-2xl font-pixel">
               {calculatePayout()} SOL
             </span>
           </div>
@@ -577,8 +577,8 @@ export function BettingPanel({
       )}
 
       {!connected ? (
-        <div className="p-4 rounded-2xl clay-block mb-4">
-          <p className="text-sm text-center text-muted-foreground font-medium">
+        <div className="p-4 pixel-box mb-4">
+          <p className="text-sm text-center text-muted-foreground font-pixel-body">
             Please connect your wallet to place bets
           </p>
         </div>
@@ -588,27 +588,27 @@ export function BettingPanel({
           whileTap={{ scale: 0.98 }}
           disabled={!selectedPlayer || betAmount <= 0 || isPlacingBet || hasBet || market?.isSettled}
           onClick={handlePlaceBet}
-          className={`w-full py-5 rounded-2xl font-display text-lg flex items-center justify-center gap-2 transition-all
-            ${selectedPlayer && betAmount > 0 && !hasBet && !market?.isSettled ? "clay-btn" : "clay-block opacity-60 cursor-not-allowed"}
+          className={`w-full py-5 font-pixel text-sm flex items-center justify-center gap-2 transition-all
+            ${selectedPlayer && betAmount > 0 && !hasBet && !market?.isSettled ? "pixel-btn" : "pixel-box opacity-60 cursor-not-allowed"}
           `}
         >
           {isPlacingBet ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Placing Bet...
+              PLACING BET...
             </>
           ) : (
             <>
               <Wallet className="w-5 h-5" />
               {selectedPlayer
-                ? `Bet on ${selectedPlayer === player1.id ? player1.shortName : player2.shortName}`
-                : "Select a Player"}
+                ? `BET ON ${selectedPlayer === player1.id ? player1.shortName : player2.shortName}`
+                : "SELECT PLAYER"}
             </>
           )}
         </motion.button>
       )}
 
-      <p className="text-xs text-center text-muted-foreground mt-4 font-medium">
+      <p className="text-xs text-center text-muted-foreground mt-4 font-pixel-body">
         Connect wallet to place bets. Markets settle after match completion.
       </p>
     </div>
