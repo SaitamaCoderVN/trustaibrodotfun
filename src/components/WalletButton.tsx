@@ -40,13 +40,13 @@ export const WalletButton: FC = () => {
   if (!connected || !publicKey) {
     return (
       <motion.button
-        whileHover={{ scale: 1.03, y: -2 }}
-        whileTap={{ scale: 0.97 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={handleConnect}
-        className="clay-btn clay-btn-mint px-6 py-3 rounded-xl font-display text-sm flex items-center gap-2"
+        className="pixel-btn pixel-btn-green flex items-center gap-2 text-xs"
       >
         <Wallet className="w-4 h-4" />
-        Connect Wallet
+        CONNECT
       </motion.button>
     );
   }
@@ -55,9 +55,9 @@ export const WalletButton: FC = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="clay-block px-5 py-3 rounded-xl font-display text-sm flex items-center gap-2"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="pixel-box px-4 py-2 font-pixel text-xs flex items-center gap-2"
         >
           {wallet?.adapter.icon && (
             <img
@@ -66,19 +66,19 @@ export const WalletButton: FC = () => {
               className="w-4 h-4"
             />
           )}
-          <span className="text-[#4ECDC4]">{address}</span>
-          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          <span className="text-[var(--pixel-green)]">{address}</span>
+          <ChevronDown className="w-4 h-4" />
         </motion.button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 clay-block border-0 p-2">
-        <DropdownMenuItem onClick={copyAddress} className="cursor-pointer rounded-xl hover:bg-muted/50 font-medium">
-          <Copy className="w-4 h-4 mr-2 text-[#5B9BF8]" />
+      <DropdownMenuContent align="end" className="w-48 pixel-box border-0 p-2">
+        <DropdownMenuItem onClick={copyAddress} className="cursor-pointer hover:bg-gray-100 font-pixel-body">
+          <Copy className="w-4 h-4 mr-2 text-[var(--pixel-blue)]" />
           Copy Address
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-border/50" />
+        <DropdownMenuSeparator className="bg-black h-[2px]" />
         <DropdownMenuItem
           onClick={handleDisconnect}
-          className="cursor-pointer text-[#FF6B6B] rounded-xl hover:bg-[#FF6B6B]/10 font-medium"
+          className="cursor-pointer text-[var(--pixel-pink)] hover:bg-[var(--pixel-pink)]/10 font-pixel-body"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Disconnect

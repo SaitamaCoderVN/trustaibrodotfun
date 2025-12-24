@@ -10,10 +10,9 @@ type LeaderboardProps = {
   agents: AIModel[];
 };
 
-const RANK_COLORS = ["clay-block-yellow", "clay-block", "clay-block-orange"];
+const RANK_COLORS = ["pixel-box-yellow", "pixel-box", "pixel-box-orange"];
 
 export function Leaderboard({ agents }: LeaderboardProps) {
-  // Use useMemo to ensure consistent sorting between server and client
   const sortedAgents = useMemo(() => {
     return [...agents].sort(
       (a, b) => b.totalScore - a.totalScore || b.wins - a.wins
@@ -23,14 +22,14 @@ export function Leaderboard({ agents }: LeaderboardProps) {
   const getRankIcon = (index: number) => {
     switch (index) {
       case 0:
-        return <Crown className="w-6 h-6 text-white drop-shadow-md" />;
+        return <Crown className="w-6 h-6" />;
       case 1:
-        return <Medal className="w-6 h-6 text-gray-600" />;
+        return <Medal className="w-6 h-6" />;
       case 2:
-        return <Medal className="w-6 h-6 text-white drop-shadow-md" />;
+        return <Medal className="w-6 h-6" />;
       default:
         return (
-          <span className="w-6 h-6 flex items-center justify-center text-muted-foreground font-display text-lg">
+          <span className="w-6 h-6 flex items-center justify-center text-muted-foreground font-pixel text-sm">
             {index + 1}
           </span>
         );
@@ -44,13 +43,13 @@ export function Leaderboard({ agents }: LeaderboardProps) {
   };
 
   return (
-    <div className="p-6 rounded-3xl clay-block">
+    <div className="p-6 pixel-box">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-2xl clay-block-yellow flex items-center justify-center">
-          <Trophy className="w-6 h-6 text-white drop-shadow-md" />
+        <div className="w-12 h-12 pixel-box-yellow flex items-center justify-center">
+          <Trophy className="w-6 h-6" />
         </div>
-        <h3 className="font-display text-2xl text-[#FF9F45]">
-          Leaderboard
+        <h3 className="font-pixel text-sm">
+          LEADERBOARD
         </h3>
       </div>
 
@@ -63,57 +62,57 @@ export function Leaderboard({ agents }: LeaderboardProps) {
             transition={{ delay: index * 0.08 }}
             whileHover={{ scale: 1.02, x: 4 }}
             className={`
-              p-4 rounded-2xl flex items-center gap-4 transition-all
-              ${index < 3 ? RANK_COLORS[index] : "clay-block"}
+              p-4 flex items-center gap-4 transition-all
+              ${index < 3 ? RANK_COLORS[index] : "border-4 border-black bg-gray-50"}
             `}
           >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${index < 3 ? "bg-white/30" : "bg-muted/50"}`}>
+            <div className={`w-10 h-10 flex items-center justify-center ${index < 3 ? "bg-white/30" : "bg-gray-100"} border-2 border-black`}>
               {getRankIcon(index)}
             </div>
 
             <AIAvatar 
               agent={agent} 
               size="lg" 
-              className={index < 3 ? "bg-white/30" : ""}
+              className={`border-4 border-black ${index < 3 ? "bg-white/30" : ""}`}
             />
 
             <div className="flex-1 min-w-0">
               <p 
-                className={`font-display text-lg truncate ${index < 3 ? (index === 1 ? "text-foreground" : "text-white") : ""}`}
-                style={{ color: index >= 3 ? agent.color : undefined }}
+                className={`font-pixel text-xs truncate ${index < 3 && index !== 1 ? "text-white" : ""}`}
+                style={{ color: index >= 3 || index === 1 ? agent.color : undefined }}
               >
                 {agent.shortName}
               </p>
-              <p className={`text-xs truncate ${index < 3 ? (index === 1 ? "text-muted-foreground" : "text-white/80") : "text-muted-foreground"}`}>
+              <p className={`font-pixel-body text-xs truncate ${index < 3 && index !== 1 ? "text-white/80" : "text-muted-foreground"}`}>
                 {agent.strategy}
               </p>
             </div>
 
             <div className="text-right">
-              <p className={`font-display text-xl ${index < 3 ? (index === 1 ? "text-[#4ECDC4]" : "text-white") : "text-[#4ECDC4]"}`}>
+              <p className={`font-pixel text-lg ${index < 3 && index !== 1 ? "text-white" : "text-[var(--pixel-green)]"}`}>
                 {agent.totalScore}
               </p>
-              <div className={`flex items-center gap-1 text-xs ${index < 3 ? (index === 1 ? "text-muted-foreground" : "text-white/80") : "text-muted-foreground"}`}>
+              <div className={`flex items-center gap-1 font-pixel text-xs ${index < 3 && index !== 1 ? "text-white/80" : "text-muted-foreground"}`}>
                 <Activity className="w-3 h-3" />
-                <span className="font-semibold">
+                <span>
                   {agent.wins}W-{agent.losses}L
                 </span>
               </div>
             </div>
 
-            <div className={`w-16 text-right p-2 rounded-xl ${index < 3 ? "bg-white/20" : "bg-muted/30"}`}>
+            <div className={`w-16 text-right p-2 border-2 border-black ${index < 3 ? "bg-white/20" : "bg-gray-100"}`}>
               <div className="flex items-center justify-end gap-1">
                 <TrendingUp
-                  className={`w-3 h-3 ${Number(getWinRate(agent)) >= 50 ? "text-[#4ECDC4]" : "text-[#FF6B6B]"}`}
+                  className={`w-3 h-3 ${Number(getWinRate(agent)) >= 50 ? "text-[var(--pixel-green)]" : "text-[var(--pixel-pink)]"}`}
                 />
                 <span
-                  className={`font-display ${Number(getWinRate(agent)) >= 50 ? "text-[#4ECDC4]" : "text-[#FF6B6B]"}`}
+                  className={`font-pixel text-xs ${Number(getWinRate(agent)) >= 50 ? "text-[var(--pixel-green)]" : "text-[var(--pixel-pink)]"}`}
                 >
                   {getWinRate(agent)}%
                 </span>
               </div>
-              <p className={`text-[10px] ${index < 3 ? (index === 1 ? "text-muted-foreground" : "text-white/70") : "text-muted-foreground"}`}>
-                Win Rate
+              <p className={`font-pixel text-xs ${index < 3 && index !== 1 ? "text-white/70" : "text-muted-foreground"}`}>
+                WIN
               </p>
             </div>
           </motion.div>

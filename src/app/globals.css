@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap');
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -46,60 +46,62 @@
 }
 
 :root {
-  --radius: 1.25rem;
-  --background: #FFF5E6;
-  --foreground: #2D2D2D;
+  --radius: 0.25rem;
+  --background: #FAFAFA;
+  --foreground: #000000;
   --card: #FFFFFF;
-  --card-foreground: #2D2D2D;
+  --card-foreground: #000000;
   --popover: #FFFFFF;
-  --popover-foreground: #2D2D2D;
-  --primary: #FF6B6B;
+  --popover-foreground: #000000;
+  --primary: #FF1493;
   --primary-foreground: #FFFFFF;
-  --secondary: #FFE66D;
-  --secondary-foreground: #2D2D2D;
-  --muted: #F0E6D6;
-  --muted-foreground: #7A7A7A;
-  --accent: #4ECDC4;
-  --accent-foreground: #FFFFFF;
+  --secondary: #FFD700;
+  --secondary-foreground: #000000;
+  --muted: #F5F5F5;
+  --muted-foreground: #666666;
+  --accent: #00FF7F;
+  --accent-foreground: #000000;
   --destructive: #FF4757;
-  --border: #E0D6C6;
-  --input: #E8DED0;
-  --ring: #FF6B6B;
-  --chart-1: #FF6B6B;
-  --chart-2: #4ECDC4;
-  --chart-3: #FFE66D;
-  --chart-4: #95E1D3;
-  --chart-5: #F38181;
-  --sidebar: #FFF5E6;
-  --sidebar-foreground: #2D2D2D;
-  --sidebar-primary: #FF6B6B;
+  --border: #000000;
+  --input: #FFFFFF;
+  --ring: #8B5CF6;
+  --chart-1: #FF1493;
+  --chart-2: #00FF7F;
+  --chart-3: #FFD700;
+  --chart-4: #8B5CF6;
+  --chart-5: #00D4FF;
+  --sidebar: #FAFAFA;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #FF1493;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FFE66D;
-  --sidebar-accent-foreground: #2D2D2D;
-  --sidebar-border: #E0D6C6;
-  --sidebar-ring: #FF6B6B;
+  --sidebar-accent: #FFD700;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #000000;
+  --sidebar-ring: #8B5CF6;
   
-  --clay-coral: #FF6B6B;
-  --clay-mint: #4ECDC4;
-  --clay-yellow: #FFE66D;
-  --clay-purple: #A66CFF;
-  --clay-blue: #5B9BF8;
-  --clay-orange: #FF9F45;
-  --clay-pink: #FF85A1;
-  --clay-green: #45B7AA;
+  /* Pixel Art Color Palette */
+  --pixel-pink: #FF1493;
+  --pixel-green: #00FF7F;
+  --pixel-yellow: #FFD700;
+  --pixel-purple: #8B5CF6;
+  --pixel-blue: #00D4FF;
+  --pixel-orange: #FF6B35;
+  --pixel-red: #FF4757;
+  --pixel-black: #000000;
+  --pixel-white: #FFFFFF;
 }
 
 .dark {
-  --background: #1A1625;
-  --foreground: #F5F0FF;
-  --card: #2D2640;
-  --card-foreground: #F5F0FF;
-  --popover: #2D2640;
-  --popover-foreground: #F5F0FF;
-  --muted: #3D3555;
-  --muted-foreground: #A099B0;
-  --border: #4D4565;
-  --input: #3D3555;
+  --background: #1A1A2E;
+  --foreground: #FFFFFF;
+  --card: #16213E;
+  --card-foreground: #FFFFFF;
+  --popover: #16213E;
+  --popover-foreground: #FFFFFF;
+  --muted: #0F3460;
+  --muted-foreground: #A0A0A0;
+  --border: #FFFFFF;
+  --input: #0F3460;
 }
 
 @layer base {
@@ -108,215 +110,381 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
   }
 }
 
+/* Pixel Art Font Classes */
+.font-pixel {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.font-pixel-body {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+}
+
 .font-display {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 800;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .font-mono {
   font-family: 'Space Mono', monospace;
 }
 
-.clay-block {
-  background: linear-gradient(145deg, #FFFFFF, #F0E6D6);
-  border-radius: 24px;
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.08),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.9);
-  border: 3px solid rgba(0, 0, 0, 0.1);
+/* Pixel Art UI Components */
+.pixel-box {
+  background: var(--pixel-white);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  transition: all 0.1s ease;
 }
 
-.clay-block-coral {
-  background: linear-gradient(145deg, #FF8585, #FF5252);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-block-mint {
-  background: linear-gradient(145deg, #6EDED6, #3CBDB4);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-block-yellow {
-  background: linear-gradient(145deg, #FFF085, #FFE054);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.5);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-block-purple {
-  background: linear-gradient(145deg, #B885FF, #9455FF);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-block-blue {
-  background: linear-gradient(145deg, #7BB5FF, #4A8AE8);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-block-orange {
-  background: linear-gradient(145deg, #FFB56E, #FF8E2C);
-  box-shadow: 
-    8px 8px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 -4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 4px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-}
-
-.clay-btn {
-  background: linear-gradient(145deg, #FF8585, #FF5252);
-  border-radius: 16px;
-  box-shadow: 
-    6px 6px 0 0 rgba(0, 0, 0, 0.25),
-    inset 0 -3px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 3px 0 0 rgba(255, 255, 255, 0.4);
-  border: 3px solid rgba(0, 0, 0, 0.15);
-  transition: all 0.15s ease;
-  color: white;
-  font-weight: 700;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.clay-btn:hover {
+.pixel-box:hover {
   transform: translate(2px, 2px);
-  box-shadow: 
-    4px 4px 0 0 rgba(0, 0, 0, 0.25),
-    inset 0 -3px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 3px 0 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 4px 4px 0 var(--pixel-black);
 }
 
-.clay-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: 
-    2px 2px 0 0 rgba(0, 0, 0, 0.25),
-    inset 0 -3px 0 0 rgba(0, 0, 0, 0.2),
-    inset 0 3px 0 0 rgba(255, 255, 255, 0.4);
-}
-
-.clay-btn-mint {
-  background: linear-gradient(145deg, #6EDED6, #3CBDB4);
-}
-
-.clay-btn-yellow {
-  background: linear-gradient(145deg, #FFF085, #FFE054);
-  color: #2D2D2D;
-  text-shadow: none;
-}
-
-.clay-btn-purple {
-  background: linear-gradient(145deg, #B885FF, #9455FF);
-}
-
-.clay-input {
-  background: #FFFFFF;
-  border-radius: 16px;
-  box-shadow: 
-    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
-    inset -2px -2px 4px rgba(255, 255, 255, 0.9);
-  border: 3px solid rgba(0, 0, 0, 0.08);
-}
-
-.clay-badge {
-  background: linear-gradient(145deg, #FFF085, #FFE054);
-  border-radius: 100px;
-  padding: 6px 16px;
-  box-shadow: 
-    4px 4px 0 0 rgba(0, 0, 0, 0.15),
-    inset 0 -2px 0 0 rgba(0, 0, 0, 0.1),
-    inset 0 2px 0 0 rgba(255, 255, 255, 0.5);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  font-weight: 700;
-  color: #2D2D2D;
-}
-
-.clay-badge-coral {
-  background: linear-gradient(145deg, #FF8585, #FF5252);
+.pixel-box-pink {
+  background: var(--pixel-pink);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
   color: white;
 }
 
-.clay-badge-mint {
-  background: linear-gradient(145deg, #6EDED6, #3CBDB4);
+.pixel-box-green {
+  background: var(--pixel-green);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  color: black;
+}
+
+.pixel-box-yellow {
+  background: var(--pixel-yellow);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  color: black;
+}
+
+.pixel-box-purple {
+  background: var(--pixel-purple);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
   color: white;
 }
 
-.vibrant-grid {
+.pixel-box-blue {
+  background: var(--pixel-blue);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  color: black;
+}
+
+.pixel-box-orange {
+  background: var(--pixel-orange);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  color: white;
+}
+
+/* Pixel Buttons */
+.pixel-btn {
+  background: var(--pixel-purple);
+  border: 4px solid var(--pixel-black);
+  box-shadow: 6px 6px 0 var(--pixel-black);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  padding: 16px 24px;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.pixel-btn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--pixel-black);
+}
+
+.pixel-btn:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0 0 0 var(--pixel-black);
+}
+
+.pixel-btn-pink {
+  background: var(--pixel-pink);
+}
+
+.pixel-btn-green {
+  background: var(--pixel-green);
+  color: black;
+}
+
+.pixel-btn-yellow {
+  background: var(--pixel-yellow);
+  color: black;
+}
+
+.pixel-btn-blue {
+  background: var(--pixel-blue);
+  color: black;
+}
+
+/* Pixel Badge */
+.pixel-badge {
+  background: var(--pixel-pink);
+  border: 3px solid var(--pixel-black);
+  box-shadow: 3px 3px 0 var(--pixel-black);
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  color: white;
+  display: inline-block;
+}
+
+.pixel-badge-green {
+  background: var(--pixel-green);
+  color: black;
+}
+
+.pixel-badge-yellow {
+  background: var(--pixel-yellow);
+  color: black;
+}
+
+.pixel-badge-purple {
+  background: var(--pixel-purple);
+}
+
+/* Pixel Input */
+.pixel-input {
+  background: var(--pixel-white);
+  border: 4px solid var(--pixel-black);
+  box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.1);
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  padding: 12px 16px;
+}
+
+.pixel-input:focus {
+  outline: none;
+  box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.1), 0 0 0 4px var(--pixel-purple);
+}
+
+/* Highlight Text Box */
+.pixel-highlight {
+  background: var(--pixel-green);
+  border: 4px solid var(--pixel-black);
+  padding: 4px 16px;
+  display: inline-block;
+}
+
+.pixel-highlight-yellow {
+  background: var(--pixel-yellow);
+}
+
+.pixel-highlight-pink {
+  background: var(--pixel-pink);
+  color: white;
+}
+
+/* Grid Background Pattern */
+.pixel-grid {
   background-color: var(--background);
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(78, 205, 196, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255, 230, 109, 0.1) 0%, transparent 40%);
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-@keyframes bounce-soft {
+/* Dotted Background Pattern */
+.pixel-dots {
+  background-color: var(--background);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--pixel-black);
+  border-top: 4px solid var(--pixel-black);
+  border-bottom: 4px solid var(--pixel-black);
+  padding: 16px 0;
+}
+
+.marquee-content {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 32px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: white;
+}
+
+.marquee-item span {
+  color: var(--pixel-green);
+}
+
+/* Pixel Card Variants */
+.pixel-card {
+  background: white;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0 black;
+  padding: 24px;
+  transition: all 0.15s ease;
+}
+
+.pixel-card:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0 black;
+}
+
+/* Step Number */
+.pixel-step-number {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 48px;
+  color: var(--pixel-pink);
+  line-height: 1;
+}
+
+/* Timeline/Roadmap */
+.pixel-timeline-item {
+  position: relative;
+  padding-left: 32px;
+}
+
+.pixel-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  background: var(--pixel-green);
+  border: 3px solid black;
+}
+
+.pixel-timeline-item.coming::before {
+  background: var(--pixel-yellow);
+}
+
+.pixel-timeline-item.planned::before {
+  background: var(--pixel-purple);
+}
+
+/* FAQ Accordion */
+.pixel-accordion {
+  border: 4px solid black;
+  background: white;
+}
+
+.pixel-accordion-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 24px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  text-align: left;
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.pixel-accordion-trigger:hover {
+  background: var(--muted);
+}
+
+.pixel-accordion-content {
+  padding: 0 24px 20px;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes pixel-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
 
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
+@keyframes pixel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-@keyframes pop-in {
-  0% { transform: scale(0.8); opacity: 0; }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); opacity: 1; }
+@keyframes pixel-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
-@keyframes pulse-block {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+.animate-pixel-bounce {
+  animation: pixel-bounce 1s ease-in-out infinite;
 }
 
-.animate-bounce-soft {
-  animation: bounce-soft 2s ease-in-out infinite;
+.animate-pixel-pulse {
+  animation: pixel-pulse 1.5s ease-in-out infinite;
 }
 
-.animate-wiggle {
-  animation: wiggle 0.5s ease-in-out infinite;
+.animate-pixel-shake {
+  animation: pixel-shake 0.3s ease-in-out;
 }
 
-.animate-pop-in {
-  animation: pop-in 0.4s ease-out forwards;
+/* Status Badges */
+.status-live {
+  background: var(--pixel-green);
+  color: black;
 }
 
-.animate-pulse-block {
-  animation: pulse-block 2s ease-in-out infinite;
+.status-coming {
+  background: var(--pixel-yellow);
+  color: black;
 }
 
-.block-shadow {
-  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 0.2);
+.status-planned {
+  background: var(--pixel-purple);
+  color: white;
 }
 
-.block-shadow-sm {
-  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.15);
-}
+/* Legacy class aliases for compatibility */
 
-.block-shadow-lg {
-  box-shadow: 12px 12px 0 0 rgba(0, 0, 0, 0.2);
-}
+/* Legacy class aliases for compatibility - use same CSS as pixel-* */
+.clay-block { background: var(--pixel-white); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); transition: all 0.1s ease; }
+.clay-block-coral { background: var(--pixel-pink); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: white; }
+.clay-block-mint { background: var(--pixel-green); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: black; }
+.clay-block-yellow { background: var(--pixel-yellow); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: black; }
+.clay-block-purple { background: var(--pixel-purple); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: white; }
+.clay-block-blue { background: var(--pixel-blue); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: white; }
+.clay-block-orange { background: var(--pixel-orange); border: 4px solid var(--pixel-black); box-shadow: 6px 6px 0 var(--pixel-black); color: white; }
+.clay-btn, .clay-btn-purple { background: var(--pixel-pink); border: 4px solid var(--pixel-black); box-shadow: 4px 4px 0 var(--pixel-black); color: white; font-family: 'Press Start 2P', cursive; padding: 12px 24px; cursor: pointer; transition: all 0.1s ease; }
+.clay-btn-mint { background: var(--pixel-green); border: 4px solid var(--pixel-black); box-shadow: 4px 4px 0 var(--pixel-black); color: black; font-family: 'Press Start 2P', cursive; padding: 12px 24px; cursor: pointer; transition: all 0.1s ease; }
+.clay-btn-yellow { background: var(--pixel-yellow); border: 4px solid var(--pixel-black); box-shadow: 4px 4px 0 var(--pixel-black); color: black; font-family: 'Press Start 2P', cursive; padding: 12px 24px; cursor: pointer; transition: all 0.1s ease; }
+.clay-badge { background: var(--pixel-yellow); border: 4px solid var(--pixel-black); color: black; font-family: 'Press Start 2P', cursive; padding: 4px 12px; font-size: 12px; }
+.clay-badge-coral { background: var(--pixel-pink); border: 4px solid var(--pixel-black); color: white; font-family: 'Press Start 2P', cursive; padding: 4px 12px; font-size: 12px; }
+.clay-badge-mint { background: var(--pixel-green); border: 4px solid var(--pixel-black); color: black; font-family: 'Press Start 2P', cursive; padding: 4px 12px; font-size: 12px; }
+.clay-input { background: var(--pixel-white); border: 4px solid var(--pixel-black); font-family: 'VT323', monospace; font-size: 20px; padding: 8px 16px; }
+.vibrant-grid { background-color: var(--background); background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px); background-size: 16px 16px; }
 
 nextjs-portal {
   display: none !important;
